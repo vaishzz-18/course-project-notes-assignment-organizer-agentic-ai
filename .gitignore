@@ -1,0 +1,69 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment and Secrets (CRITICAL)
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+
+# Python Cache & Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Node & Frontend Build
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+build/
+.vite/
+
+# Database & Sensitive Backups
+*.db.phase0_backup
+*.db.backup*
+*backup_before_cleanup*
+accounts_export.csv
+.git_backup/
+.git_backupp/
+migration_report.json
+
+# Local workspace development artifacts (authoritative packaged source is in 'Course Project/Source Code/')
+/backend/
+/frontend/
+/data/
+/start_backend.bat
+/start_frontend.bat
+/docker-compose.yml
+/.env.example
+/prompt.md
+generate_final_report.py
+extract_ch2.py
+
+# IDE & Editor Configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Antigravity Brain / Logs
+.gemini/

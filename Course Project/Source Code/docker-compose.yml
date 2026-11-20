@@ -1,0 +1,75 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aura-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=sqlite+aiosqlite:////app/data/organizer.db
+      - MCP_MODE=embedded
+      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  mcp_server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aura-mcp-server
+    restart: unless-stopped
+    command: python -m mcp_server.course_mcp_server --transport streamable-http --port 8001
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:////app/data/organizer.db
+    volumes:
+      - ./data:/app/data
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: aura-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: aura-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: aura_db
+      POSTGRES_USER: aura_user
+      POSTGRES_PASSWORD: aura_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    profiles:
+      - postgres
+
+  redis:
+    image: redis:7-alpine
+    container_name: aura-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    profiles:
+      - redis
+
+volumes:
+  pgdata:
