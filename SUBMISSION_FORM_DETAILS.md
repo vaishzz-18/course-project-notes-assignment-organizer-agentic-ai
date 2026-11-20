@@ -11,7 +11,7 @@ Copy and paste these exact details into the Google Form / LMS submission sheet:
 | **Artifact Name** | `Chapter 2. Course Project, Notes & Assignment Organizer` |
 | **Platform Name** | `apniLeap AURA (Academic Unified Resource Agent)` |
 | **Repository Name** | `course-project-notes-assignment-organizer` |
-| **Repository URL** | `https://github.com/<YOUR_GITHUB_USERNAME>/course-project-notes-assignment-organizer` |
+| **Repository URL** | `https://github.com/vaishzz-18/course-project-notes-assignment-organizer-agentic-ai` |
 | **Primary Contact Email** | `vaishp1881@gmail.com` |
 
 ---
