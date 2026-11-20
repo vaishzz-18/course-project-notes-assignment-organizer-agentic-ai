@@ -132,61 +132,76 @@ The core production system is driven by **Seven Specialized Agents** registered 
 
 ```mermaid
 flowchart TD
-    subgraph Client Layer
-        WebPortal[React + TypeScript Academic Portal]
-        Workbench[15-Lab Curriculum Workbench]
+    subgraph ClientLayer["Client Layer"]
+        WebPortal["React and TypeScript Academic Portal"]
+        Workbench["15-Lab Curriculum Workbench"]
     end
 
-    subgraph API & Gateway Layer
-        Gateway[FastAPI REST Gateway :8000]
-        Auth[JWT Role-Based Access Control]
+    subgraph GatewayLayer["API and Gateway Layer"]
+        Gateway["FastAPI REST Gateway - port 8000"]
+        Auth["JWT Role-Based Access Control"]
     end
 
-    subgraph Agentic Orchestration Layer
-        Orchestrator[AURA Orchestrator & Supervisor]
-        LangGraph[9-Node Cyclic StateGraph Engine]
-        Swarm[Parallel Worker Swarm : Semaphore 4]
+    subgraph AgenticLayer["Agentic Orchestration Layer"]
+        Orchestrator["AURA Orchestrator and Supervisor"]
+        LangGraph["9-Node Cyclic StateGraph Engine"]
+        Swarm["Parallel Worker Swarm - Semaphore 4"]
     end
 
-    subgraph Specialist Agents Layer
-        NotesAgent[Notes & Knowledge Agent]
-        DistAgent[Assignment & Distribution Agent]
-        IntakeAgent[Submission & Collection Agent]
-        SimAgent[Similarity & Plagiarism Agent]
-        GradeAgent[Grading & Feedback Agent]
-        ProjectAgent[Project & Milestone Agent]
+    subgraph SpecialistLayer["Specialist Agents Layer"]
+        NotesAgent["Notes and Knowledge Agent"]
+        DistAgent["Assignment and Distribution Agent"]
+        IntakeAgent["Submission and Collection Agent"]
+        SimAgent["Similarity and Plagiarism Agent"]
+        GradeAgent["Grading and Feedback Agent"]
+        ProjectAgent["Project and Milestone Agent"]
     end
 
-    subgraph FastMCP & Protocol Layer
-        MCPServer[FastMCP Standalone Server :8001]
-        MCPConnector[MCP Client Connector Client]
+    subgraph MCPLayer["FastMCP and Protocol Layer"]
+        MCPServer["FastMCP Standalone Server - port 8001"]
+        MCPConnector["MCP Client Connector"]
     end
 
-    subgraph Data & Storage Layer
-        DB[(Relational DB : SQLite / PostgreSQL)]
-        VectorStore[(Document Chunk Embeddings : 768-dim)]
-        FileStore[(Local Storage / MinIO S3)]
-        AuditStore[(Immutable Audit Logs)]
+    subgraph DataLayer["Data and Storage Layer"]
+        DB[("Relational DB - SQLite / PostgreSQL")]
+        VectorStore[("Document Chunk Embeddings - 768-dim")]
+        FileStore[("Local Storage / MinIO S3")]
+        AuditStore[("Immutable Audit Logs")]
     end
 
-    subgraph Governance & Safety
-        ApprovalGate{Faculty Approval Gate}
-        HumanReview([Named Faculty Member Sign-Off])
+    subgraph Governance["Governance and Safety"]
+        ApprovalGate{"Faculty Approval Gate"}
+        HumanReview(["Named Faculty Member Sign-Off"])
     end
 
-    Client Layer <==> Gateway
+    WebPortal <--> Gateway
+    Workbench <--> Gateway
     Gateway --> Auth
     Auth --> Orchestrator
     Orchestrator <--> LangGraph
     Orchestrator <--> Swarm
-    Orchestrator <--> Specialist Agents Layer
-    Specialist Agents Layer <--> MCPConnector
+    Orchestrator <--> NotesAgent
+    Orchestrator <--> DistAgent
+    Orchestrator <--> IntakeAgent
+    Orchestrator <--> SimAgent
+    Orchestrator <--> GradeAgent
+    Orchestrator <--> ProjectAgent
+    NotesAgent <--> MCPConnector
+    DistAgent <--> MCPConnector
+    IntakeAgent <--> MCPConnector
+    SimAgent <--> MCPConnector
+    GradeAgent <--> MCPConnector
+    ProjectAgent <--> MCPConnector
     MCPConnector <--> MCPServer
-    MCPServer <--> Data & Storage Layer
-    Specialist Agents Layer <--> Data & Storage Layer
+    MCPServer <--> DB
+    MCPServer <--> VectorStore
+    MCPServer <--> FileStore
+    MCPServer <--> AuditStore
+    NotesAgent <--> DB
+    GradeAgent <--> DB
     GradeAgent --> ApprovalGate
     ApprovalGate <--> HumanReview
-    HumanReview -->|Approved & Signed| DB
+    HumanReview -->|"Approved and Signed"| DB
 ```
 
 ---
